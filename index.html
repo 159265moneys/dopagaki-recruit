@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>ドパガキ採用｜株式会社next マーケティング職</title>
+<meta name="description" content="スロット・連打・検定・隠しドパ玉10個。触るところしかない採用サイト。株式会社next マーケティング職、募集中。">
+<meta name="theme-color" content="#050507">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="ドパガキ採用｜株式会社next">
+<meta property="og:description" content="遊べる仕掛けしかない採用サイト。隠しドパ玉、全部で10個あります。">
+<meta property="og:site_name" content="株式会社next RECRUIT">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Dela+Gothic+One&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "./assets/vendor/three.module.js",
+    "three/addons/": "./assets/vendor/addons/"
+  }
+}
+</script>
+</head>
+<body class="is-locked">
+
+<!-- ============================================================ LOADER -->
+<div class="loader" id="loader">
+  <div class="loader__inner">
+    <div class="loader__logo">株式会社<span class="ballspot" data-ball="1">next</span> ／ RECRUIT</div>
+    <div class="loader__bar"><i id="loaderBar"></i></div>
+    <div class="loader__pct"><span id="loaderPct">0</span><small>%</small></div>
+    <p class="loader__msg" id="loaderMsg">ドーパミン供給ラインに接続中…</p>
+    <button class="loader__enter" id="loaderEnter" type="button" hidden>
+      <span class="loader__enter-label">ドパる準備ができました</span>
+      <span class="loader__enter-sub">タップして開始（音が出ます）</span>
+    </button>
+  </div>
+  <div class="loader__scan" aria-hidden="true"></div>
+</div>
+
+<!-- ============================================================ HUD -->
+<div class="progressline" aria-hidden="true"><i id="progressLine"></i></div>
+
+<header class="hud" id="hud">
+  <a class="hud__brand" href="#top" id="brandBtn">
+    <span class="hud__mark" aria-hidden="true"></span>
+    <span class="hud__brandtxt">next<i>／RECRUIT</i></span>
+  </a>
+
+  <div class="hud__center">
+    <div class="hud__chip hud__dp" id="chipDp" title="ドーパミン">
+      <span>DP</span><strong id="hudDp">0</strong>
+    </div>
+    <div class="hud__chip hud__lv" id="chipLv" title="レベル">
+      <span>Lv</span><strong id="hudLv">1</strong>
+      <div class="hud__lvbar"><i id="hudLvBar"></i></div>
+    </div>
+    <button class="hud__chip hud__ball" id="chipBall" type="button" title="隠しドパ玉">
+      <span>🧠</span><strong id="hudBall">0</strong><small>/10</small>
+    </button>
+    <div class="hud__chip hud__prog" id="chipProg" title="このサイトをどれだけ見たか">
+      <span>踏破</span><strong id="hudProg">0</strong><small>%</small>
+    </div>
+  </div>
+
+  <div class="hud__right">
+    <button class="hud__btn" id="btnSound" type="button" aria-pressed="false" title="音のON/OFF">
+      <span class="hud__eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+      <span class="hud__btntxt" id="soundLabel">SOUND OFF</span>
+    </button>
+    <a class="hud__cta" href="#entry">応募</a>
+  </div>
+</header>
+
+<div class="ballpanel" id="ballPanel" hidden>
+  <div class="ballpanel__in">
+    <button class="ballpanel__close" id="ballClose" type="button" aria-label="閉じる">×</button>
+    <h3>隠しドパ玉 <b id="ballPanelCount">0</b> / 10</h3>
+    <p>サイトのどこかに10個。全部集めると<b>隠しページ</b>が開きます。</p>
+    <ol class="ballpanel__list" id="ballList"></ol>
+  </div>
+</div>
+
+<!-- ============================================================ FIXED LAYERS -->
+<canvas id="bg3d" class="layer-3d" aria-hidden="true"></canvas>
+<div class="layer-scrim" aria-hidden="true"></div>
+<canvas id="fx" class="layer-fx" aria-hidden="true"></canvas>
+<div class="layer-grain" aria-hidden="true"></div>
+<div class="layer-flash" id="flash" aria-hidden="true"></div>
+<div class="toasts" id="toasts" aria-live="polite"></div>
+<div class="obs" id="obs" aria-live="polite"></div>
+<div class="reachveil" id="reachveil" aria-hidden="true"></div>
+<div class="cursor" id="cursor" aria-hidden="true"><i></i></div>
+
+<main id="top">
+
+<!-- ============================================================ 01 FV / SLOT -->
+<section class="hero" id="hero" data-sec="FV">
+  <div class="hero__inner">
+    <p class="hero__eyebrow"><span class="blink">●</span> 株式会社next ／ マーケティング職 採用 2026</p>
+
+    <h1 class="hero__title" id="heroTitle">
+      <span class="line"><span class="w">ド</span><span class="w">パ</span><span class="w">ガ</span><span class="w">キ</span><span class="w small">、</span></span>
+      <span class="line"><span class="w">こ</span><span class="w">っ</span><span class="w">ち</span><span class="w">側</span><span class="w">に</span><span class="w">来</span><span class="w">い</span><span class="w small">。</span></span>
+    </h1>
+    <p class="hero__sub">※ この文字、<b>1文字ずつクリックできます</b></p>
+
+    <div class="slot" id="slot">
+      <div class="slot__body">
+        <div class="slot__frame">
+          <div class="slot__lights" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+          <div class="slot__window">
+            <div class="reel" data-r="0"><div class="reel__strip"></div></div>
+            <div class="reel" data-r="1"><div class="reel__strip"></div></div>
+            <div class="reel" data-r="2"><div class="reel__strip"></div></div>
+            <span class="slot__line" aria-hidden="true"></span>
+            <span class="slot__glare" aria-hidden="true"></span>
+          </div>
+          <div class="slot__readout">
+            <div><span>SPIN</span><strong id="slotSpins">0</strong></div>
+            <div><span>DOPAMINE</span><strong id="slotDp">0</strong></div>
+            <div><span>おしい</span><strong id="slotNear">0</strong></div>
+          </div>
+          <button class="screw ballspot" data-ball="2" type="button" aria-label="ネジ"></button>
+        </div>
+        <button class="lever" id="slotLever" type="button" aria-label="レバーを引く">
+          <span class="lever__rod"></span><span class="lever__ball"></span>
+        </button>
+      </div>
+
+      <p class="slot__hype" id="slotHype" aria-live="polite"></p>
+
+      <button class="slotbtn" id="slotBtn" type="button">
+        <span class="slotbtn__txt">回す</span>
+        <span class="slotbtn__sub">SPACE / タップ</span>
+      </button>
+
+      <p class="game__note">※景品はありません。<b>でも、もう1回押しましたよね。</b></p>
+    </div>
+
+    <div class="hero__foot">
+      <a class="scrolldown" href="#burst"><span>下にもぜんぶ仕掛けがあります</span><i aria-hidden="true"></i></a>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ 02 連打耐久 -->
+<section class="burst" id="burst" data-sec="BURST">
+  <div class="wrap">
+    <p class="sec__no">01 ／ MINIGAME</p>
+    <h2 class="sec__ttl">5秒連打耐久<span class="sec__ttl-sub">指の速さ＝PDCAの回転数（諸説あり）</span></h2>
+
+    <div class="burst__box">
+      <div class="burst__gauge">
+        <div class="burst__time"><i id="burstTime"></i></div>
+        <div class="burst__count"><span id="burstCount">0</span><small>回</small></div>
+        <div class="burst__cps">CPS <b id="burstCps">0.0</b></div>
+      </div>
+
+      <button class="burst__btn" id="burstBtn" type="button"><span id="burstLabel">スタート</span></button>
+
+      <ol class="burst__rank" id="burstRank">
+        <li><b>1</b><span>社内最速 R.A</span><u>78回</u></li>
+        <li><b>2</b><span>代表 Y.N</span><u>61回</u></li>
+        <li class="burst__me"><b>?</b><span>あなた</span><u id="burstMine">—</u></li>
+        <li class="burst__last"><b>—</b><span><span class="ballspot" data-ball="3">名無し</span>の応募者</span><u>3回</u></li>
+      </ol>
+      <p class="burst__note" id="burstNote">※ 記録は保存されません。何回でもどうぞ。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ 03 WHY -->
+<section class="reasons" id="reasons" data-sec="REASONS">
+  <div class="wrap">
+    <p class="sec__no">02 ／ WHY</p>
+    <h2 class="sec__ttl">なぜ<span class="hl">ドパガキ</span>が向いているのか<span class="sec__ttl-sub">カードをクリックで裏返る</span></h2>
+
+    <ol class="reasons__list" id="reasonList">
+      <li class="flip" tabindex="0">
+        <div class="flip__in">
+          <div class="flip__f"><span class="flip__no">01</span><b>バズは<br>体で覚えるもの</b><em>めくる →</em></div>
+          <div class="flip__b">分析ツールは誰でも開ける。<br>「これ伸びるわ」の体感は<b>1日6時間溶かした脳</b>にしか宿らない。<br><small>※ ご家族にはそう説明してください</small></div>
+        </div>
+      </li>
+      <li class="flip" tabindex="0">
+        <div class="flip__in">
+          <div class="flip__f"><span class="flip__no">02</span><b>飽きっぽさ＝<br>回転数</b><em>めくる →</em></div>
+          <div class="flip__b">3秒で飽きる人は、3秒で次を試せる人。<br>うちは<b>月217本</b>施策を回す。<br><small>※ じっくり型も普通に活躍しています</small></div>
+        </div>
+      </li>
+      <li class="flip" tabindex="0">
+        <div class="flip__in">
+          <div class="flip__f"><span class="flip__no">03</span><b>“つい”を知る者は<br>“つい”を作れる</b><em>めくる →</em></div>
+          <div class="flip__b">なぜ赤いバッジは消したくなるのか。<br>体で答えを知っているなら<b>もう半分マーケター</b>。<br><small>残りの半分は<span class="ballspot" data-ball="4">入社後</span>に用意します</small></div>
+        </div>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============================================================ 04 QUIZ -->
+<section class="quiz" id="quiz" data-sec="QUIZ">
+  <div class="wrap">
+    <p class="sec__no">03 ／ DIAGNOSIS</p>
+    <h2 class="sec__ttl">ドパガキ検定<span class="sec__ttl-sub">全8問・30秒・結果画像が出ます</span></h2>
+
+    <div class="quiz__box" id="quizBox">
+      <div class="quiz__stage is-active" data-stage="start">
+        <div class="quiz__startart" aria-hidden="true"><span>🧠</span><span>📱</span><span>🔥</span></div>
+        <p class="quiz__startlead">あなたの脳が、どこまで焼かれているか測ります。</p>
+        <button class="btn btn--big" id="quizStart" type="button">検定をはじめる</button>
+      </div>
+
+      <div class="quiz__stage" data-stage="q">
+        <div class="quiz__prog">
+          <div class="quiz__progbar"><i id="quizBar"></i></div>
+          <span class="quiz__progtxt">Q<b id="quizIdx">1</b> / 8</span>
+        </div>
+        <h3 class="quiz__q" id="quizQ">—</h3>
+        <div class="quiz__opts" id="quizOpts"></div>
+      </div>
+
+      <div class="quiz__stage" data-stage="r">
+        <div class="result">
+          <p class="result__lead">診断結果</p>
+          <div class="result__gauge">
+            <svg viewBox="0 0 200 200" aria-hidden="true">
+              <circle class="result__track" cx="100" cy="100" r="86"></circle>
+              <circle class="result__fill" id="resultArc" cx="100" cy="100" r="86"></circle>
+            </svg>
+            <div class="result__num"><span id="resultPct">0</span><small>%</small></div>
+          </div>
+          <h3 class="result__type" id="resultType">—</h3>
+          <p class="result__desc" id="resultDesc">—</p>
+          <div class="result__verdict" id="resultVerdict"></div>
+          <div class="result__actions">
+            <button class="btn" id="quizShare" type="button">結果画像を保存</button>
+            <a class="btn btn--x" id="quizTweet" href="#" target="_blank" rel="noopener">Xでシェア</a>
+            <button class="btn btn--ghost" id="quizRetry" type="button">もう一度</button>
+          </div>
+          <canvas id="shareCanvas" width="1200" height="630" class="result__canvas"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ 05 NUMBERS -->
+<section class="numbers" id="numbers" data-sec="NUMBERS">
+  <div class="wrap">
+    <p class="sec__no">04 ／ FACTS</p>
+    <h2 class="sec__ttl">数字で見るnext<span class="sec__ttl-sub">全部クリックできます。裏が出ます</span></h2>
+    <ul class="numbers__grid" id="numbersGrid"></ul>
+    <p class="numbers__note"><span class="ballspot" data-ball="5">※</span> どれが本当かは面接で。</p>
+  </div>
+</section>
+
+<!-- ============================================================ 06 PEOPLE -->
+<section class="people" id="people" data-sec="PEOPLE">
+  <div class="wrap">
+    <p class="sec__no">05 ／ MEMBER</p>
+    <h2 class="sec__ttl">ドパガキ、実在します<span class="sec__ttl-sub">カードをクリックで裏／長押しでもう1個</span></h2>
+    <div class="people__grid" id="peopleGrid"></div>
+  </div>
+</section>
+
+<!-- ============================================================ 07 JOB -->
+<section class="job" id="job" data-sec="JOB">
+  <div class="wrap">
+    <p class="sec__no">06 ／ REQUIREMENTS</p>
+    <h2 class="sec__ttl">募集要項</h2>
+    <p class="sec__lead job__lead">ここだけ真面目です。<b>ふざけてるのはサイトだけ。</b></p>
+
+    <div class="job__skip">
+      <button class="btn btn--ghost" id="jobSkip" type="button">読んだフリをする</button>
+      <span id="jobSkipNote"></span>
+    </div>
+
+    <dl class="job__table">
+      <div class="job__row"><dt>職種</dt><dd>マーケティング（グロース／SNS／広告運用／コンテンツ）<br><span class="job__tag">中途</span><span class="job__tag">新卒</span><span class="job__tag">未経験可</span></dd></div>
+      <div class="job__row"><dt>業務内容</dt><dd><ul class="job__ul">
+        <li>SNS（X／TikTok／Instagram／YouTube）の企画・運用・分析</li>
+        <li>ショート動画・LP・クリエイティブの企画とディレクション</li>
+        <li>広告運用（Meta／Google／TikTok Ads）と改善サイクル設計</li>
+        <li>データ分析にもとづく施策立案、A/Bテストの設計と実行</li>
+        <li>「これ流行りそう」を最速で形にして世に出すこと</li>
+      </ul></dd></div>
+      <div class="job__row"><dt>必須要件</dt><dd><ul class="job__ul">
+        <li>SNSを日常的に使っていること（見る専でも可）</li>
+        <li>数字を見て「なぜ？」を考えるのが苦じゃないこと</li>
+        <li>思いついたら手が動くこと</li>
+      </ul></dd></div>
+      <div class="job__row"><dt>歓迎要件</dt><dd><ul class="job__ul">
+        <li>個人アカウントの運用経験（フォロワー数は問いません）</li>
+        <li>広告運用／SQL／GA4 いずれかの実務経験</li>
+        <li>動画編集・デザイン・ライティングのいずれかができる</li>
+      </ul></dd></div>
+      <div class="job__row"><dt>雇用形態</dt><dd>正社員（試用期間3ヶ月・条件変更なし）</dd></div>
+      <div class="job__row"><dt>勤務地</dt><dd>本社オフィス ／ リモート併用可</dd></div>
+      <div class="job__row"><dt>勤務時間</dt><dd>フレックスタイム制（コアタイム 12:00–16:00）</dd></div>
+      <div class="job__row"><dt>給与</dt><dd>年俸制／経験・スキルを考慮の上、当社規定により決定<br><small>※ 想定レンジは初回面談でご提示します</small></dd></div>
+      <div class="job__row"><dt>選考フロー</dt><dd>
+        <ol class="job__flow">
+          <li><span>01</span>エントリー</li><li><span>02</span>カジュアル面談30分</li>
+          <li><span>03</span>面接1〜2回</li><li><span>04</span>内定</li>
+        </ol>
+        <p class="job__flownote">最短2週間。<b>スピードだけは本気です。</b></p>
+      </dd></div>
+    </dl>
+    <p class="job__disclaimer"><span class="ballspot" data-ball="6">※</span> 本ページの条件は掲載用のサンプル文言です。正式な条件は原本をご確認ください。</p>
+  </div>
+</section>
+
+<!-- ============================================================ 08 押すな -->
+<section class="donot" id="donot" data-sec="DONOT">
+  <div class="wrap">
+    <p class="sec__no">07 ／ DO NOT</p>
+    <h2 class="sec__ttl">押すな</h2>
+    <p class="sec__lead">絶対に押すなよ。<b>何が起きるか知らないぞ。</b></p>
+    <button class="donot__btn" id="donotBtn" type="button"><span>押すな</span></button>
+    <p class="donot__msg" id="donotMsg"></p>
+    <p class="donot__count">押した回数：<b id="donotCount">0</b></p>
+  </div>
+</section>
+
+<!-- ============================================================ 09 YOUR LOG -->
+<section class="log" id="log" data-sec="LOG">
+  <div class="wrap">
+    <p class="sec__no">08 ／ YOUR LOG</p>
+    <h2 class="sec__ttl log__ttl">ところで。<br><span class="hl">全部、記録してました。</span></h2>
+
+    <div class="log__terminal" id="logTerminal">
+      <div class="log__bar"><i></i><i></i><i></i><span>visitor_session.log</span></div>
+      <ul class="log__list" id="logList"></ul>
+      <p class="log__hint">※ このログは外部送信していません。<b>あなたのブラウザの中だけ</b>で作られています。</p>
+    </div>
+
+    <div class="log__punchline">
+      <p class="reveal">スロットの「おしい」、<b>あれ全部わざとです。</b></p>
+      <p class="reveal">「そろそろ来ます」も嘘。確率は毎回同じ。<br><b>…と言いつつ15回外したら当たる仕掛けも入れてました。</b></p>
+      <p class="reveal reveal--gap big">ぜんぶ、<span class="hl">設計です。</span></p>
+      <p class="reveal">今日あなたが感じた「気持ちいい」も「おしい」も、<br>誰かが意図して置いたものでした。</p>
+      <p class="reveal final"><b>次は、あなたが置く番です。</b></p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ 隠しセクション -->
+<section class="secret" id="secret" data-sec="SECRET" hidden>
+  <div class="wrap">
+    <p class="sec__no">EX ／ SECRET</p>
+    <h2 class="sec__ttl">ドパ玉、全部見つけましたね。</h2>
+    <p class="secret__lead">
+      隅から隅まで触らないと開かないようにしてありました。<br>
+      <b>「面白そうだから全部触ってみた」——それ、うちの仕事の全部です。</b>
+    </p>
+    <a class="btn btn--big" id="secretEntry" href="#" data-need-url>この実績を持って応募する</a>
+    <p class="secret__note">※ 面談で「ドパ玉10個取りました」と言ってください。伝わります。</p>
+  </div>
+</section>
+
+<!-- ============================================================ 10 ENTRY -->
+<section class="entry" id="entry" data-sec="ENTRY">
+  <div class="wrap">
+    <p class="sec__no">09 ／ ENTRY</p>
+    <h2 class="entry__ttl"><span class="entry__ttl-en">LAST CALL</span>ドパガキ、<br>こっち側に来い。</h2>
+    <p class="entry__lead">履歴書は後で大丈夫。まず30分、話しましょう。<br><small>※ 面談は1.0倍速です。ご了承ください。</small></p>
+
+    <a class="entrybtn" id="entryBtn" href="#" data-need-url>
+      <span class="entrybtn__bg"></span>
+      <span class="entrybtn__txt">エントリーする</span>
+      <span class="entrybtn__sub">所要3分 ／ カジュアル面談から</span>
+    </a>
+
+    <ul class="entry__links">
+      <li><a href="#" data-need-url>採用担当に話を聞く（カジュアル面談）</a></li>
+      <li><a href="#" data-need-url>会社紹介資料をみる</a></li>
+    </ul>
+  </div>
+</section>
+
+</main>
+
+<!-- ============================================================ FOOTER -->
+<footer class="footer">
+  <div class="wrap footer__inner">
+    <div class="footer__brand">
+      <span class="hud__mark" aria-hidden="true"></span>
+      <strong>株式会社next</strong><span>MARKETING RECRUIT 2026</span>
+    </div>
+    <nav class="footer__nav" aria-label="フッターナビ">
+      <a href="#burst">連打</a><a href="#reasons">WHY</a><a href="#quiz">検定</a>
+      <a href="#numbers">数字</a><a href="#people">社員</a><a href="#job">募集要項</a>
+      <a href="#donot">押すな</a><a href="#entry">応募</a>
+    </nav>
+    <p class="footer__copy">© 株式会社next<br><small>行動計測はブラウザ内のみ。外部送信ゼロ。</small></p>
+  </div>
+  <div class="footer__huge" aria-hidden="true">ドパ<span class="ballspot" data-ball="7">ガ</span>キ</div>
+</footer>
+
+<script type="module" src="assets/js/main.js"></script>
+</body>
+</html>
